@@ -1572,7 +1572,9 @@ function MonDKP:CreateBidWindow()
     end)
 
     --percent bid check button
-    f.PercentCheck = CreateFrame("CheckButton", nil, MonDKP.ConfigTab1, "UICheckButtonTemplate");
+    local checkBtn = {}
+    f.checkBtn = checkBtn;
+    f.PercentCheck = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate");
     f.PercentCheck:SetChecked(pflag) 
     f.PercentCheck.text:SetText("Percent Minimum")
     f.PercentCheck:SetScript("OnClick",
