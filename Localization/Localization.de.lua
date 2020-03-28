@@ -309,6 +309,7 @@ if GetLocale() == "deDE" then
     FOROFFHANDSLOT = "für Schildhand Gegenstände.",
     FORONEHANDSLOT = "für Einhandwaffen.",
     FOROTHERSLOT = "für alle anderen Gegenstände, die nicht in die oben genannten Kategorien fallen (Questitems, etc.)",
+    FORPERCENTSLOT = "",
     FORPLAYERS = "für die folgenden Spieler",
     FORRANGESLOT = "für Fernkampfgegenstände (Bögen, Waffen, Zauberstäbe, Relikte).",
     FORREASON = "Begründung",

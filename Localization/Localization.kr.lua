@@ -304,6 +304,7 @@ if GetLocale() == "koKR" then
     FOROFFHANDSLOT = "핸즈프리 품목 (실드, 캐스터 핸즈).",
     FORONEHANDSLOT = "한손 무기 용.",
     FOROTHERSLOT = "위의 범주에 속하지 않는 다른 모든 항목 (머리, 하트, 헌터 리프 등)",
+    FORPERCENTSLOT = "",
     FORPLAYERS = "다음 선수들에게",
     FORRANGESLOT = "레인지 슬롯 아이템 (보우, 총, 지팡이, 유물)",
     FORREASON = "이유로",

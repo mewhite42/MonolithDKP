@@ -304,6 +304,7 @@ if GetLocale() == "frFR" then
     FOROFFHANDSLOT = "pour les articles non portés (boucliers, roulettes).",
     FORONEHANDSLOT = "pour les armes à une main.",
     FOROTHERSLOT = "pour tous les autres articles qui n'entrent pas dans les catégories ci-dessus (têtes, cœurs, feuille de chasseur, etc.)",
+    FORPERCENTSLOT = "",
     FORPLAYERS = "pour les joueurs suivants",
     FORRANGESLOT = "pour les articles de fente de gamme (arcs, pistolets, baguettes, reliques).",
     FORREASON = "pour raison",

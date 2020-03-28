@@ -410,7 +410,7 @@ function MonDKP:GetMaxBid(itemLink)
   end
 end
 
-function MonDKP:ToggleBidWindow(loot, lootIcon, itemName)
+function MonDKP:ToggleBidWindow(loot, lootIcon, itemName, pflag) --added percentflag
   local minBid;
   mode = MonDKP_DB.modes.mode;
 
@@ -756,7 +756,7 @@ function MonDKP_Register_ShiftClickLootWindowHook()      -- hook function into L
                 local pass, err = pcall(function()
                   lootIcon, itemName, _, _, _ = GetLootSlotInfo(i)
                   itemLink = GetLootSlotLink(i)
-                    MonDKP:ToggleBidWindow(itemLink, lootIcon, itemName)
+                    MonDKP:ToggleBidWindow(itemLink, lootIcon, itemName, false)
                 end)
 
             if not pass then
@@ -793,7 +793,7 @@ function MonDKP_Register_ShiftClickLootWindowHook()      -- hook function into L
                 local pass, err = pcall(function()
                   lootIcon, itemName, _, _, _ = GetLootSlotInfo(i)
                   itemLink = GetLootSlotLink(i)
-                    MonDKP:ToggleBidWindow(itemLink, lootIcon, itemName)
+                    MonDKP:ToggleBidWindow(itemLink, lootIcon, itemName, false)
                 end)
 
             if not pass then
@@ -1571,7 +1571,17 @@ function MonDKP:CreateBidWindow()
       GameTooltip:Hide()
     end)
 
-
+    --percent bid check button
+    f.PercentCheck = CreateFrame("CheckButton", nil, MonDKP.ConfigTab1, "UICheckButtonTemplate");
+    f.PercentCheck:SetChecked(pflag) 
+    f.PercentCheck.text:SetText("Percent Minimum")
+    f.PercentCheck:SetScript("OnClick",
+      function()
+        pflag = f.PercentCheck:GetChecked();
+        --figure out how to update minimum bid here
+      end)
+    f.PercentCheck.text:SetFontObject("MonDKPSmall")
+    
     --------------------------------------------------
     -- Bid Table
     --------------------------------------------------
@@ -1773,7 +1783,7 @@ function MonDKP:CreateBidWindow()
 
         CurrItemForBid = link
         CurrItemIcon = itemIcon
-        MonDKP:ToggleBidWindow(CurrItemForBid, CurrItemIcon, itemName)
+        MonDKP:ToggleBidWindow(CurrItemForBid, CurrItemIcon, itemName, false)
         ClearCursor()
       end
       end)
