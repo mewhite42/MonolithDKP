@@ -16,6 +16,7 @@ local mode;
 local events = CreateFrame("Frame", "BiddingEventsFrame");
 local menuFrame = CreateFrame("Frame", "MonDKPBidWindowMenuFrame", UIParent, "UIDropDownMenuTemplate")
 local hookedSlots = {}
+local minItemBid = 0;
 
 local function UpdateBidWindow()
   core.BiddingWindow.item:SetText(CurrItemForBid)
@@ -477,8 +478,13 @@ function MonDKP:ToggleBidWindow(loot, lootIcon, itemName, pflag) --added percent
           core.BiddingWindow.CustomMinBid:SetScript("OnClick", function(self)
             if self:GetChecked() == true then
               core.BiddingWindow.minBid:SetText(MonDKP_round(minBid, MonDKP_DB.modes.rounding))
+              minItemBid = MonDKP_round(minBid, MonDKP_DB.modes.rounding)
             else
               core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid))
+              minItemBid = MonDKP:GetMinBid(CurrItemForBid)
+            end
+            if core.BiddingWindow.PercentCheck:GetChecked() then
+              core.BiddingWindow.minBid:SetText(MonDKP_DB.MinBidBySlot.Percent)
             end
           end)
 
@@ -1577,10 +1583,15 @@ function MonDKP:CreateBidWindow()
     f.PercentCheck = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate");
     f.PercentCheck:SetChecked(pflag) 
     f.PercentCheck.text:SetText("Percent Minimum")
+    f.PercentCheck:SetPoint("BOTTOM", f.StartBidding,"TOPLEFT",-10, 5);
     f.PercentCheck:SetScript("OnClick",
       function()
         pflag = f.PercentCheck:GetChecked();
-        --figure out how to update minimum bid here
+        if pflag then
+          f.minBid:SetText(MonDKP_DB.MinBidBySlot.Percent)
+        else 
+          f.minBid:SetText(minItemBid)
+        end
       end)
     f.PercentCheck.text:SetFontObject("MonDKPSmall")
     
