@@ -36,11 +36,11 @@ MonDKP.Commands = {
   end,
   ["reset"] = MonDKP.ResetPosition,
   ["bid"] = function(...)
-	if core.Initialized then
+    if core.Initialized then
 	  local item = strjoin(" ", ...)
 	  pflag = (string.sub(item,1,1) == "%") --check for % flag
 	  --if pflag then
-	--	item = string.gsub(item,"%","") --remove % from item
+		--item = string.gsub(item,"%","") --remove % from item
 	  --end
       MonDKP:CheckOfficer()
       MonDKP:StatusVerify_Update()
@@ -51,7 +51,7 @@ MonDKP.Commands = {
         else
           local itemName,_,_,_,_,_,_,_,_,itemIcon = GetItemInfo(item)
           MonDKP:Print("Opening Bid Window for: ".. item)
-          MonDKP:ToggleBidWindow(item, itemIcon, itemName, pflag)
+          MonDKP:ToggleBidWindow(item, itemIcon, itemName,pflag)
         end
       end
       MonDKP:BidInterface_Toggle()
