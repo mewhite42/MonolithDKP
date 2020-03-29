@@ -16,7 +16,8 @@ local mode;
 local events = CreateFrame("Frame", "BiddingEventsFrame");
 local menuFrame = CreateFrame("Frame", "MonDKPBidWindowMenuFrame", UIParent, "UIDropDownMenuTemplate")
 local hookedSlots = {}
-local minItemBid = 0;
+local minItemBid;
+local minPercentBid;
 
 local function UpdateBidWindow()
   core.BiddingWindow.item:SetText(CurrItemForBid)
@@ -411,6 +412,10 @@ function MonDKP:GetMaxBid(itemLink)
   end
 end
 
+function MonDKP:GetPercentMin()
+  return MonDKP_DB.MaxBidBySlot.Percent
+end
+
 function MonDKP:ToggleBidWindow(loot, lootIcon, itemName, pflag) --added percentflag
   local minBid;
   mode = MonDKP_DB.modes.mode;
@@ -483,8 +488,10 @@ function MonDKP:ToggleBidWindow(loot, lootIcon, itemName, pflag) --added percent
               core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid))
               minItemBid = MonDKP:GetMinBid(CurrItemForBid)
             end
+            minPercentBid = MonDKP:GetPercentMin();
             if core.BiddingWindow.PercentCheck:GetChecked() then
-              core.BiddingWindow.minBid:SetText(MonDKP_DB.MinBidBySlot.Percent)
+              core.BiddingWindow.minBid:SetText(minPercentBid)
+              
             end
           end)
 
@@ -1588,7 +1595,7 @@ function MonDKP:CreateBidWindow()
       function()
         pflag = f.PercentCheck:GetChecked();
         if pflag then
-          f.minBid:SetText(MonDKP_DB.MinBidBySlot.Percent)
+          f.minBid:SetText(minPercentBid)
         else 
           f.minBid:SetText(minItemBid)
         end
