@@ -51,7 +51,7 @@ MonDKP.Commands = {
         else
           local itemName,_,_,_,_,_,_,_,_,itemIcon = GetItemInfo(item)
           MonDKP:Print("Opening Bid Window for: ".. item)
-          MonDKP:ToggleBidWindow(item, itemIcon, itemName,pflag)
+          MonDKP:ToggleBidWindow(item, itemIcon, itemName, pflag)
         end
       end
       MonDKP:BidInterface_Toggle()

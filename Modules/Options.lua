@@ -473,7 +473,7 @@ function MonDKP:Options()
       MonDKP.ConfigTab4.DefaultMinBids.SlotBox[17].tooltipDescription = prefix.." "..L["FOROTHERSLOT"]
       --18th slot config
       MonDKP.ConfigTab4.DefaultMinBids.SlotBox[18].Header:SetText(L["PERCENT"]..": ")
-      MonDKP.ConfigTab4.DefaultMinBids.SlotBox[18]:SetText(MonDKP_DB.MinBidBySlot.Other)
+      MonDKP.ConfigTab4.DefaultMinBids.SlotBox[18]:SetText(MonDKP_DB.MinBidBySlot.Percent)
       MonDKP.ConfigTab4.DefaultMinBids.SlotBox[18].tooltipText = L["PERCENT"]
       MonDKP.ConfigTab4.DefaultMinBids.SlotBox[18].tooltipDescription = prefix.." "..L["FORPERCENTSLOT"]
 

@@ -345,10 +345,11 @@ function MonDKP_CHAT_MSG_WHISPER(text, ...)
   end)
 end
 
-function MonDKP:GetMinBid(itemLink)
+function MonDKP:GetMinBid(itemLink, pflag)
   local _,_,_,_,_,_,_,_,loc = GetItemInfo(itemLink);
-
-  if loc == "INVTYPE_HEAD" then
+  if pflag then
+    return MonDKP_DB.MinBidBySlot.Percent
+  elseif loc == "INVTYPE_HEAD" then
     return MonDKP_DB.MinBidBySlot.Head
   elseif loc == "INVTYPE_NECK" then
     return MonDKP_DB.MinBidBySlot.Neck
@@ -493,7 +494,17 @@ function MonDKP:ToggleBidWindow(loot, lootIcon, itemName, pflag)
             if self:GetChecked() == true then
               core.BiddingWindow.minBid:SetText(MonDKP_round(minBid, MonDKP_DB.modes.rounding))
             else
-              core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid))
+              core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid,core.BiddingWindow.PercentCheck:GetChecked()))
+            end
+          end)
+          --percent check
+          core.BiddingWindow.PercentCheck:Show();
+          core.BiddingWindow.PercentCheck:SetChecked(true)
+          core.BiddingWindow.PercentCheck:SetScript("OnClick", function(self)
+            if self:GetChecked() == true then
+              core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid,true))
+            else
+              core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid,false))
             end
           end)
 
@@ -513,13 +524,15 @@ function MonDKP:ToggleBidWindow(loot, lootIcon, itemName, pflag)
             if self:GetChecked() == true then
               core.BiddingWindow.cost:SetText(MonDKP_round(minBid, MonDKP_DB.modes.rounding))
             else
-              core.BiddingWindow.cost:SetText(MonDKP:GetMinBid(CurrItemForBid))
+              core.BiddingWindow.cost:SetText(MonDKP:GetMinBid(CurrItemForBid,core.BiddingWindow.PercentCheck:GetChecked()))
             end
           end)
+          core.BiddingWindow.PercentCheck:Hide();
         end
        else
-        minBid = MonDKP:GetMinBid(CurrItemForBid)
+        minBid = MonDKP:GetMinBid(CurrItemForBid,core.BiddingWindow.PercentCheck:GetChecked())
         core.BiddingWindow.CustomMinBid:Hide();
+        core.BiddingWindow.PercentCheck:Hide();
        end
 
        if mode == "Minimum Bid Values" or (mode == "Zero Sum" and MonDKP_DB.modes.ZeroSumBidType == "Minimum Bid") then
@@ -570,9 +583,9 @@ local function StartBidding()
     if MonDKP_DB.defaults.AutoOpenBid then  -- toggles bid window if option is set to
       MonDKP:BidInterface_Toggle()
     end
-
+    
     local search_min = MonDKP:Table_Search(MonDKP_MinBids, core.BiddingWindow.itemName:GetText())
-    local val_min = MonDKP:GetMinBid(CurrItemForBid);
+    local val_min = MonDKP:GetMinBid(CurrItemForBid,core.BiddingWindow.PercentCheck:GetChecked());
     local search_max = MonDKP:Table_Search(MonDKP_MaxBids, core.BiddingWindow.itemName:GetText())
     local val_max = MonDKP:GetMaxBid(CurrItemForBid);
 
@@ -1593,11 +1606,12 @@ function MonDKP:CreateBidWindow()
     f.PercentCheck:SetChecked(pflag) 
     f.PercentCheck.text:SetText("Percent Minimum")
     f.PercentCheck:SetPoint("BOTTOM", f.StartBidding,"TOPLEFT",-10, 5);
-    f.PercentCheck:SetScript("OnClick",
-      function()
-        pflag = f.PercentCheck:GetChecked()
+    --f.PercentCheck:SetScript("OnClick",
+    --  function()
+    --    pflag = f.PercentCheck:GetChecked()
+        
         --still not working 
-      end)
+    --  end)
     f.PercentCheck.text:SetFontObject("MonDKPSmall")
 
     --------------------------------------------------
