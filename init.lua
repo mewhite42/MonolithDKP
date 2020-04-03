@@ -37,11 +37,7 @@ MonDKP.Commands = {
   ["reset"] = MonDKP.ResetPosition,
   ["bid"] = function(...)
     if core.Initialized then
-	  local item = strjoin(" ", ...)
-	  pflag = (string.sub(item,1,1) == "%") --check for % flag
-	  --if pflag then
-		--item = string.gsub(item,"%","") --remove % from item
-	  --end
+      local item = strjoin(" ", ...)
       MonDKP:CheckOfficer()
       MonDKP:StatusVerify_Update()
 
@@ -51,7 +47,7 @@ MonDKP.Commands = {
         else
           local itemName,_,_,_,_,_,_,_,_,itemIcon = GetItemInfo(item)
           MonDKP:Print("Opening Bid Window for: ".. item)
-          MonDKP:ToggleBidWindow(item, itemIcon, itemName, pflag)
+          MonDKP:ToggleBidWindow(item, itemIcon, itemName)
         end
       end
       MonDKP:BidInterface_Toggle()
@@ -508,7 +504,7 @@ function MonDKP:OnInitialize(event, name)		-- This is the FIRST function to run 
 		if not MonDKP_DB.raiders then MonDKP_DB.raiders = {} end
 		if not MonDKP_DB.MinBidBySlot or not MonDKP_DB.MinBidBySlot.Head then
 			MonDKP_DB.MinBidBySlot = {
-    			Head = 70, Neck = 70, Shoulders = 70, Cloak = 70, Chest = 70, Bracers = 70, Hands = 70, Belt = 70, Legs = 70, Boots = 70, Ring = 70, Trinket = 70, OneHanded = 70, TwoHanded = 70, OffHand = 70, Range = 70, Other = 70, Percent = 25,
+    			Head = 10, Neck = 10, Shoulders = 10, Cloak = 10, Chest = 10, Bracers = 10, Hands = 10, Belt = 10, Legs = 10, Boots = 10, Ring = 10, Trinket = 10, OneHanded = 10, TwoHanded = 10, OffHand = 10, Range = 10, Other = 10, Percent = 25
     		}
     	end
     	if not MonDKP_DB.MaxBidBySlot or not MonDKP_DB.MaxBidBySlot.Head then

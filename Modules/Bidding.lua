@@ -439,6 +439,16 @@ function MonDKP:ToggleBidWindow(loot, lootIcon, itemName, pflag)
       core.BiddingWindow:SetPoint(a.point, a.relativeTo, a.relativePoint, a.x, a.y)
     end
 
+    --percent check
+    core.BiddingWindow.PercentCheck:Show();
+    core.BiddingWindow.PercentCheck:SetScript("OnClick", function(self)
+      if self:GetChecked() == true then
+        core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid,true))
+      else
+        core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid,false))
+      end
+    end)
+
     core.BiddingWindow:SetShown(true)
      core.BiddingWindow:SetFrameLevel(10)
 
@@ -497,16 +507,7 @@ function MonDKP:ToggleBidWindow(loot, lootIcon, itemName, pflag)
               core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid,core.BiddingWindow.PercentCheck:GetChecked()))
             end
           end)
-          --percent check
-          core.BiddingWindow.PercentCheck:Show();
-          core.BiddingWindow.PercentCheck:SetChecked(true)
-          core.BiddingWindow.PercentCheck:SetScript("OnClick", function(self)
-            if self:GetChecked() == true then
-              core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid,true))
-            else
-              core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid,false))
-            end
-          end)
+          
 
           core.BiddingWindow.CustomMaxBid:Show();
           core.BiddingWindow.CustomMaxBid:SetChecked(true)
@@ -527,12 +528,12 @@ function MonDKP:ToggleBidWindow(loot, lootIcon, itemName, pflag)
               core.BiddingWindow.cost:SetText(MonDKP:GetMinBid(CurrItemForBid,core.BiddingWindow.PercentCheck:GetChecked()))
             end
           end)
-          core.BiddingWindow.PercentCheck:Hide();
+          --core.BiddingWindow.PercentCheck:Hide();
         end
        else
         minBid = MonDKP:GetMinBid(CurrItemForBid,core.BiddingWindow.PercentCheck:GetChecked())
         core.BiddingWindow.CustomMinBid:Hide();
-        core.BiddingWindow.PercentCheck:Hide();
+        --core.BiddingWindow.PercentCheck:Hide();
        end
 
        if mode == "Minimum Bid Values" or (mode == "Zero Sum" and MonDKP_DB.modes.ZeroSumBidType == "Minimum Bid") then
