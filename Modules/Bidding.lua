@@ -1607,12 +1607,6 @@ function MonDKP:CreateBidWindow()
     f.PercentCheck:SetChecked(pflag) 
     f.PercentCheck.text:SetText("Percent Minimum")
     f.PercentCheck:SetPoint("BOTTOM", f.StartBidding,"TOPLEFT",-10, 5);
-    --f.PercentCheck:SetScript("OnClick",
-    --  function()
-    --    pflag = f.PercentCheck:GetChecked()
-        
-        --still not working 
-    --  end)
     f.PercentCheck.text:SetFontObject("MonDKPSmall")
 
     --------------------------------------------------
