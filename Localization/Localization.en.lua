@@ -287,6 +287,7 @@ core.L = {
   HOLY = "Holy",
   HOUR = "hour",
   HOURS = "hours",
+  IMPORTDKP = "Import DKP",
   IN = "in",
   INCLUDESBYTTDESC = "Includes players on the standby list when automatically awarding Boss Kill DKP activated above.",
   INCLUDESBYTTWARN = "If Standby Opt In is active, DKP is awarded to the raid immediately, while the standby list award is delayed until after the two minute opt in window expires.",

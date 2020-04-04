@@ -98,6 +98,9 @@ MonDKP.Commands = {
   ["export"] = function(time, ...)
     MonDKP:ToggleExportWindow()
   end,
+  ["import"] = function(time, ...)
+    MonDKP:ToggleImportWindow()
+  end,
   ["modes"] = function()
     if core.Initialized then
       MonDKP:CheckOfficer()
