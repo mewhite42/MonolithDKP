@@ -261,6 +261,7 @@ core.L = {
   FOROFFHANDSLOT = "for off-hand items (Shields, caster off-hands).",
   FORONEHANDSLOT = "for one-handed weapons.",
   FOROTHERSLOT = "for all other items that do not fall into the above categories (Heads, Hearts, Hunter Leaf etc.)",
+  FORPERCENTSLOT = "for a minimum percent bid",
   FORPLAYERS = "for the following players",
   FORRANGESLOT = "for range slot items (Bows, guns, wands, relics).",
   FORREASON = "for reason",

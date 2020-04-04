@@ -304,6 +304,7 @@ if GetLocale() == "zhCN" then
     FOROFFHANDSLOT = "用于副手物品（盾牌，施法者副手）。",
     FORONEHANDSLOT = "单手武器。",
     FOROTHERSLOT = "对于不属于上述类别的所有其他物品（头部，心脏，猎人之叶等）",
+    FORPERCENTSLOT = "",
     FORPLAYERS = "对于以下玩",
     FORRANGESLOT = "用于范围插槽物品（弓，枪，魔杖，遗物）。",
     FORREASON = "由于原",

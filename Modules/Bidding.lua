@@ -150,6 +150,8 @@ function MonDKP_CHAT_MSG_WHISPER(text, ...)
         response = L["CANTCANCELROLL"]
       end
       dkp = tonumber(MonDKP:GetPlayerDKP(name))
+      --percent = tonumber(core.BiddingWindow.minBid:GetNumber())*.01*dkp
+
       if not dkp then    -- exits function if player is not on the DKP list
         SendChatMessage(L["INVALIDPLAYER"], "WHISPER", nil, name)
         return
@@ -158,7 +160,7 @@ function MonDKP_CHAT_MSG_WHISPER(text, ...)
       if (tonumber(cmd) and (core.BiddingWindow.maxBid == nil or tonumber(cmd) <= core.BiddingWindow.maxBid:GetNumber() or core.BiddingWindow.maxBid:GetNumber() == 0)) or ((mode == "Static Item Values" or (mode == "Zero Sum" and MonDKP_DB.modes.ZeroSumBidType == "Static")) and not cmd) then
         if dkp then
           if (cmd and cmd <= dkp) or (MonDKP_DB.modes.SubZeroBidding == true and dkp >= 0) or (MonDKP_DB.modes.SubZeroBidding == true and MonDKP_DB.modes.AllowNegativeBidders == true) or (mode == "Static Item Values" and dkp > 0 and (dkp > core.BiddingWindow.cost:GetNumber() or MonDKP_DB.modes.SubZeroBidding == true or MonDKP_DB.modes.costvalue == "Percent")) or ((mode == "Zero Sum" and MonDKP_DB.modes.ZeroSumBidType == "Static") and not cmd) then
-            if (cmd and core.BiddingWindow.minBid and tonumber(core.BiddingWindow.minBid:GetNumber()) <= cmd) or mode == "Static Item Values" or (mode == "Zero Sum" and MonDKP_DB.modes.ZeroSumBidType == "Static") or (mode == "Zero Sum" and MonDKP_DB.modes.ZeroSumBidType == "Minimum Bid" and cmd >= core.BiddingWindow.minBid:GetNumber()) then
+            if (cmd and core.BiddingWindow.minBid and tonumber(core.BiddingWindow.minBid:GetNumber()) <= cmd and not core.BiddingWindow.PercentCheck:GetChecked()) or (cmd and core.BiddingWindow.minBid and tonumber(core.BiddingWindow.minBid:GetNumber())*.01*dkp <= cmd and core.BiddingWindow.PercentCheck:GetChecked()) or mode == "Static Item Values" or (mode == "Zero Sum" and MonDKP_DB.modes.ZeroSumBidType == "Static") or (mode == "Zero Sum" and MonDKP_DB.modes.ZeroSumBidType == "Minimum Bid" and cmd >= core.BiddingWindow.minBid:GetNumber()) then
               for i=1, #Bids_Submitted do           -- checks if a bid was submitted, removes last bid if it was
                 if (not (mode == "Zero Sum" and MonDKP_DB.modes.ZeroSumBidType == "Static")) and Bids_Submitted[i] and Bids_Submitted[i].player == name and Bids_Submitted[i].bid < cmd then
                   table.remove(Bids_Submitted, i)
@@ -211,7 +213,11 @@ function MonDKP_CHAT_MSG_WHISPER(text, ...)
 
               BidScrollFrame_Update()
             else
-              response = L["BIDDENIEDMINBID"].." "..core.BiddingWindow.minBid:GetNumber().."!"
+              if core.BiddingWindow.PercentCheck:GetChecked() then
+                response = L["BIDDENIEDMINBID"].." "..tonumber(core.BiddingWindow.minBid:GetNumber())*.01*dkp.."!"
+              else
+                response = L["BIDDENIEDMINBID"].." "..core.BiddingWindow.minBid:GetNumber().."!"
+              end
             end
           elseif MonDKP_DB.modes.SubZeroBidding == true and dkp < 0 then
             response = L["BIDDENIEDNEGATIVE"].." ("..dkp.." "..L["DKP"]..")."
@@ -330,10 +336,11 @@ function MonDKP_CHAT_MSG_WHISPER(text, ...)
   end)
 end
 
-function MonDKP:GetMinBid(itemLink)
+function MonDKP:GetMinBid(itemLink, pflag)
   local _,_,_,_,_,_,_,_,loc = GetItemInfo(itemLink);
-
-  if loc == "INVTYPE_HEAD" then
+  if pflag then
+    return MonDKP_DB.MinBidBySlot.Percent
+  elseif loc == "INVTYPE_HEAD" then
     return MonDKP_DB.MinBidBySlot.Head
   elseif loc == "INVTYPE_NECK" then
     return MonDKP_DB.MinBidBySlot.Neck
@@ -410,7 +417,7 @@ function MonDKP:GetMaxBid(itemLink)
   end
 end
 
-function MonDKP:ToggleBidWindow(loot, lootIcon, itemName)
+function MonDKP:ToggleBidWindow(loot, lootIcon, itemName, pflag)
   local minBid;
   mode = MonDKP_DB.modes.mode;
 
@@ -422,6 +429,17 @@ function MonDKP:ToggleBidWindow(loot, lootIcon, itemName)
       local a = MonDKP_DB.bidpos
       core.BiddingWindow:SetPoint(a.point, a.relativeTo, a.relativePoint, a.x, a.y)
     end
+
+    --percent check
+    core.BiddingWindow.PercentCheck:Show();
+    core.BiddingWindow.PercentCheck:SetChecked(pflag)
+    core.BiddingWindow.PercentCheck:SetScript("OnClick", function(self)
+      if self:GetChecked() == true then
+        core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid,true))
+      else
+        core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid,false))
+      end
+    end)
 
     core.BiddingWindow:SetShown(true)
      core.BiddingWindow:SetFrameLevel(10)
@@ -478,9 +496,10 @@ function MonDKP:ToggleBidWindow(loot, lootIcon, itemName)
             if self:GetChecked() == true then
               core.BiddingWindow.minBid:SetText(MonDKP_round(minBid, MonDKP_DB.modes.rounding))
             else
-              core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid))
+              core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid,core.BiddingWindow.PercentCheck:GetChecked()))
             end
           end)
+          
 
           core.BiddingWindow.CustomMaxBid:Show();
           core.BiddingWindow.CustomMaxBid:SetChecked(true)
@@ -498,13 +517,15 @@ function MonDKP:ToggleBidWindow(loot, lootIcon, itemName)
             if self:GetChecked() == true then
               core.BiddingWindow.cost:SetText(MonDKP_round(minBid, MonDKP_DB.modes.rounding))
             else
-              core.BiddingWindow.cost:SetText(MonDKP:GetMinBid(CurrItemForBid))
+              core.BiddingWindow.cost:SetText(MonDKP:GetMinBid(CurrItemForBid,core.BiddingWindow.PercentCheck:GetChecked()))
             end
           end)
+          --core.BiddingWindow.PercentCheck:Hide();
         end
        else
-        minBid = MonDKP:GetMinBid(CurrItemForBid)
+        minBid = MonDKP:GetMinBid(CurrItemForBid,core.BiddingWindow.PercentCheck:GetChecked())
         core.BiddingWindow.CustomMinBid:Hide();
+        --core.BiddingWindow.PercentCheck:Hide();
        end
 
        if mode == "Minimum Bid Values" or (mode == "Zero Sum" and MonDKP_DB.modes.ZeroSumBidType == "Minimum Bid") then
@@ -555,9 +576,9 @@ local function StartBidding()
     if MonDKP_DB.defaults.AutoOpenBid then  -- toggles bid window if option is set to
       MonDKP:BidInterface_Toggle()
     end
-
+    
     local search_min = MonDKP:Table_Search(MonDKP_MinBids, core.BiddingWindow.itemName:GetText())
-    local val_min = MonDKP:GetMinBid(CurrItemForBid);
+    local val_min = MonDKP:GetMinBid(CurrItemForBid,core.BiddingWindow.PercentCheck:GetChecked());
     local search_max = MonDKP:Table_Search(MonDKP_MaxBids, core.BiddingWindow.itemName:GetText())
     local val_max = MonDKP:GetMaxBid(CurrItemForBid);
 
@@ -1571,6 +1592,14 @@ function MonDKP:CreateBidWindow()
       GameTooltip:Hide()
     end)
 
+    --percent bid check button
+    local checkBtn = {}
+    f.checkBtn = checkBtn;
+    f.PercentCheck = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate");
+    f.PercentCheck:SetChecked(pflag) 
+    f.PercentCheck.text:SetText("Percent Minimum")
+    f.PercentCheck:SetPoint("BOTTOM", f.StartBidding,"TOPLEFT",-10, 5);
+    f.PercentCheck.text:SetFontObject("MonDKPSmall")
 
     --------------------------------------------------
     -- Bid Table

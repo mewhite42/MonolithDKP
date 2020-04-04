@@ -52,7 +52,8 @@ local function SaveSettings()
     MonDKP_DB.MinBidBySlot.OffHand = MonDKP.ConfigTab4.DefaultMinBids.SlotBox[15]:GetNumber()
     MonDKP_DB.MinBidBySlot.Range = MonDKP.ConfigTab4.DefaultMinBids.SlotBox[16]:GetNumber()
     MonDKP_DB.MinBidBySlot.Other = MonDKP.ConfigTab4.DefaultMinBids.SlotBox[17]:GetNumber()
-    
+    MonDKP_DB.MinBidBySlot.Percent = MonDKP.ConfigTab4.DefaultMinBids.SlotBox[18]:GetNumber() --min percent bid
+
     MonDKP_DB.MaxBidBySlot.Head = MonDKP.ConfigTab4.DefaultMaxBids.SlotBox[1]:GetNumber()
     MonDKP_DB.MaxBidBySlot.Neck = MonDKP.ConfigTab4.DefaultMaxBids.SlotBox[2]:GetNumber()
     MonDKP_DB.MaxBidBySlot.Shoulders = MonDKP.ConfigTab4.DefaultMaxBids.SlotBox[3]:GetNumber()
@@ -261,7 +262,7 @@ function MonDKP:Options()
       local SlotBox = {}
       MonDKP.ConfigTab4.DefaultMinBids.SlotBox = SlotBox;
 
-      for i=1, 17 do
+      for i=1, 18 do --18th slot box for percent minimum
         MonDKP.ConfigTab4.DefaultMinBids.SlotBox[i] = CreateFrame("EditBox", nil, MonDKP.ConfigTab4)
         MonDKP.ConfigTab4.DefaultMinBids.SlotBox[i]:SetAutoFocus(false)
         MonDKP.ConfigTab4.DefaultMinBids.SlotBox[i]:SetMultiLine(false)
@@ -351,6 +352,8 @@ function MonDKP:Options()
           MonDKP.ConfigTab4.DefaultMinBids.SlotBox[i]:SetPoint("TOPLEFT", MonDKP.ConfigTab4.DefaultMinBids.SlotBox[1], "TOPLEFT", 150, 0)
         elseif i==17 then
           MonDKP.ConfigTab4.DefaultMinBids.SlotBox[i]:SetPoint("TOP", MonDKP.ConfigTab4.DefaultMinBids.SlotBox[8], "BOTTOM", 0, -22)
+        elseif i==18 then --added 18th slot next to legs slot
+          MonDKP.ConfigTab4.DefaultMinBids.SlotBox[i]:SetPoint("TOPLEFT", MonDKP.ConfigTab4.DefaultMinBids.SlotBox[1], "TOPLEFT", 275, 0)
         else
           MonDKP.ConfigTab4.DefaultMinBids.SlotBox[i]:SetPoint("TOP", MonDKP.ConfigTab4.DefaultMinBids.SlotBox[i-1], "BOTTOM", 0, -22)
         end
@@ -468,6 +471,12 @@ function MonDKP:Options()
       MonDKP.ConfigTab4.DefaultMinBids.SlotBox[17]:SetText(MonDKP_DB.MinBidBySlot.Other)
       MonDKP.ConfigTab4.DefaultMinBids.SlotBox[17].tooltipText = L["OTHER"]
       MonDKP.ConfigTab4.DefaultMinBids.SlotBox[17].tooltipDescription = prefix.." "..L["FOROTHERSLOT"]
+
+      --18th slot config
+      MonDKP.ConfigTab4.DefaultMinBids.SlotBox[18].Header:SetText(L["PERCENT"]..": ")
+      MonDKP.ConfigTab4.DefaultMinBids.SlotBox[18]:SetText(MonDKP_DB.MinBidBySlot.Percent) 
+      MonDKP.ConfigTab4.DefaultMinBids.SlotBox[18].tooltipText = L["PERCENT"]
+      MonDKP.ConfigTab4.DefaultMinBids.SlotBox[18].tooltipDescription = prefix.." "..L["FORPERCENTSLOT"]
 
       if MonDKP_DB.modes.costvalue == "Percent" then
         for i=1, #MonDKP.ConfigTab4.DefaultMinBids.SlotBox do

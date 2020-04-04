@@ -304,6 +304,7 @@ if GetLocale() == "esES" or GetLocale() == "esMX" then
     FOROFFHANDSLOT = "para artículos fuera de la mano (escudos, lanzador fuera de las manos).",
     FORONEHANDSLOT = "para armas con una sola mano.",
     FOROTHERSLOT = "para todos los demás elementos que no se incluyen en las categorías anteriores (cabezas, corazones, hoja de cazador, etc.)",
+    FORPERCENTSLOT = "",
     FORPLAYERS = "para los siguientes jugadores",
     FORRANGESLOT = "para artículos de ranuras (arcos, pistolas, varitas, reliquias).",
     FORREASON = "con razón",
