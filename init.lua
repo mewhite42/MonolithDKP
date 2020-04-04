@@ -39,9 +39,9 @@ MonDKP.Commands = {
     if core.Initialized then
 	  local item = strjoin(" ", ...)
 	  pflag = (string.sub(item,1,1) == "%") --check for % flag
-	  --if pflag then
-		--item = string.gsub(item,"%","") --remove % from item
-	  --end
+	  if pflag then
+		item = string.sub(item,2,-1) --remove % from item
+	  end
       MonDKP:CheckOfficer()
       MonDKP:StatusVerify_Update()
 

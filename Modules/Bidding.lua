@@ -180,17 +180,8 @@ function MonDKP_CHAT_MSG_WHISPER(text, ...)
                 if MonDKP_DB.modes.DeclineLowerBids and Bids_Submitted[1] and cmd <= Bids_Submitted[1].bid then   -- declines bids lower than highest bid
                   response = "Bid Declined! Current highest bid is "..Bids_Submitted[1].bid;
                 else
-                  --if core.BiddingWindow.PercentCheck:GetChecked() then --check if bid is less than percent minimum
-                  --  if (cmd > percent) then
-                  --    table.insert(Bids_Submitted, {player=name, bid=cmd})
-                  --    response = L["YOURBIDOF"].." "..cmd.." "..L["DKPWASACCEPTED"].."."
-                  --  else
-                  --    response = L["BIDDENIEDMINBID"].." "..percent.."!"
-                  --  end
-                  --else
                   table.insert(Bids_Submitted, {player=name, bid=cmd})
                   response = L["YOURBIDOF"].." "..cmd.." "..L["DKPWASACCEPTED"].."."
-                  --end
                 end
                 if MonDKP_DB.modes.BroadcastBids then
                   MonDKP.Sync:SendData("MonDKPBidShare", Bids_Submitted)
@@ -441,6 +432,7 @@ function MonDKP:ToggleBidWindow(loot, lootIcon, itemName, pflag)
 
     --percent check
     core.BiddingWindow.PercentCheck:Show();
+    core.BiddingWindow.PercentCheck:SetChecked(pflag)
     core.BiddingWindow.PercentCheck:SetScript("OnClick", function(self)
       if self:GetChecked() == true then
         core.BiddingWindow.minBid:SetText(MonDKP:GetMinBid(CurrItemForBid,true))
