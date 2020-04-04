@@ -13,45 +13,14 @@ function ImportDKP(MonDKP_Loot, CurFormat)
         for i in string.gmatch(text, "<PLAYER.->") do
             local name = string.match(i, "playername=.-\-")
             name = name:sub(13,-2)
-            SendChatMessage(name ,"RAID")
-            local class = string.match(i, "class=.-\"%d-\"")
-            class = class:sub(8,-2)
-            SendChatMessage(class ,"RAID")
-            --local rank = string.match(i, "rank=.-\"%.-\"")
-            --rank = rank:sub(7,-2)
-            --SendChatMessage(rank ,"RAID")
-            --local net = string.match(i, "net=.-\"%.-\"")
-           -- net = net:sub(6,-2)
-            --SendChatMessage(net ,"RAID")
+            local net = string.match(i, "net=.-\"%d.-\"")
+            net = net:sub(6,-2)
             local total = string.match(i, "total=.-\"%d-\"")
             total = total:sub(8,-2)
-            SendChatMessage(total ,"RAID")
             local spent = string.match(i, "spent=.-\"%d-\"")
             spent = spent:sub(8,-2)
-            SendChatMessage(spent ,"RAID")
 
-            local spent = string.match(i, "spent=.-\"%d-\"")
-            spent = spent:sub(8,-2)
-            SendChatMessage(spent ,"RAID")
-
-            tinsert(MonDKP_DKPTable, {
-				player="Khabiji",
-				class="Mage",
-				dkp=10,
-				previous_dkp=10,
-				lifetime_gained = 10,
-				lifetime_spent = 10,
-				rank=20,
-				rankName="None",
-				spec = "No Spec Reported",
-				role = "No Role Reported",
-            })
-            MonDKP:FilterDKPTable(core.currentSort, "reset")
-            MonDKP:ClassGraph_Update()
-            core.WorkingTable 		= MonDKP_DKPTable;
-            SendChatMessage(MonDKP_DKPTable.getn() ,"RAID")
-
-
+            MonDKP_Profile_Create(name, net , total, spent)
         end
     end
 end
