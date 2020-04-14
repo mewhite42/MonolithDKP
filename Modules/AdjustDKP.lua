@@ -457,12 +457,13 @@ function MonDKP:AdjustDKPTab_Create()
 	MonDKP.ConfigTab2.adjustButton = self:CreateButton("TOPLEFT", MonDKP.ConfigTab2.addDKP, "BOTTOMLEFT", -1, -15, L["ADJUSTDKP"]);
 	MonDKP.ConfigTab2.adjustButton:SetSize(90,25)
 	MonDKP.ConfigTab2.adjustButton:SetScript("OnClick", function()
+		--check percent sign
+		local input = MonDKP.ConfigTab2.addDKP:GetText()
+		pflag = (string.sub(input,-1,-1) == "%")
 		if #core.SelectedData > 0 and curReason and MonDKP.ConfigTab2.otherReason:GetText() then
 			local selected = L["AREYOUSURE"].." "..MonDKP_round(MonDKP.ConfigTab2.addDKP:GetNumber(), MonDKP_DB.modes.rounding).." "..L["DKPTOFOLLOWING"]..": \n\n";
-
 			for i=1, #core.SelectedData do
 				local classSearch = MonDKP:Table_Search(MonDKP_DKPTable, core.SelectedData[i].player)
-
 				if classSearch then
 					c = MonDKP:GetCColors(MonDKP_DKPTable[classSearch[1][1]].class)
 				else
@@ -479,7 +480,7 @@ function MonDKP:AdjustDKPTab_Create()
 				button1 = L["YES"],
 				button2 = L["NO"],
 				OnAccept = function()
-					MonDKP:AdjustDKP(MonDKP.ConfigTab2.addDKP:GetNumber(),false)
+					MonDKP:AdjustDKP(MonDKP.ConfigTab2.addDKP:GetNumber(),pflag)
 				end,
 				timeout = 0,
 				whileDead = true,
@@ -488,65 +489,12 @@ function MonDKP:AdjustDKPTab_Create()
 			}
 			StaticPopup_Show ("ADJUST_DKP")
 		else
-			MonDKP:AdjustDKP(MonDKP.ConfigTab2.addDKP:GetNumber(),false);
+			MonDKP:AdjustDKP(MonDKP.ConfigTab2.addDKP:GetNumber(),pflag);
 		end
 	end)
 	MonDKP.ConfigTab2.adjustButton:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
 		GameTooltip:SetText(L["ADJUSTDKP"], 0.25, 0.75, 0.90, 1, true);
-		GameTooltip:AddLine(L["ADJUSTDKPTTDESC"], 1.0, 1.0, 1.0, true);
-		GameTooltip:AddLine(L["ADJUSTDKPTTWARN"], 1.0, 0, 0, true);
-		GameTooltip:Show();
-	end)
-	MonDKP.ConfigTab2.adjustButton:SetScript("OnLeave", function(self)
-		GameTooltip:Hide()
-	end)
-
-
-	-- Adjust DKP% Button 
-	MonDKP.ConfigTab2.adjustButton = self:CreateButton("TOPLEFT", MonDKP.ConfigTab2.adjustButton, "BOTTOMLEFT", -1, -15, L["ADJUSTDKPP"]);
-	MonDKP.ConfigTab2.adjustButton:SetSize(90,25)
-	MonDKP.ConfigTab2.adjustButton:SetScript("OnClick", function()
-		MonDKP:Print("in function")
-		if #core.SelectedData > 0 and curReason and MonDKP.ConfigTab2.otherReason:GetText() then
-			MonDKP:Print("in if")
-			local selected = L["AREYOUSURE"].." "..MonDKP_round(MonDKP.ConfigTab2.addDKP:GetNumber(), MonDKP_DB.modes.rounding).."% "..L["DKPTOFOLLOWING"]..": \n\n";
-			for i=1, #core.SelectedData do
-				local classSearch = MonDKP:Table_Search(MonDKP_DKPTable, core.SelectedData[i].player)
-
-				if classSearch then
-					c = MonDKP:GetCColors(MonDKP_DKPTable[classSearch[1][1]].class)
-				else
-					c = { hex="ffffff" }
-				end
-				if i == 1 then
-				selected = selected.."|cff"..c.hex..core.SelectedData[i].player.."|r"
-				else
-					selected = selected..", |cff"..c.hex..core.SelectedData[i].player.."|r"
-				end
-			end
-			MonDKP:Print("beforepopup")
-			StaticPopupDialogs["ADJUST_DKPP"] = {
-				text = selected,
-				button1 = L["YES"],
-				button2 = L["NO"],
-				OnAccept = function()
-					MonDKP:AdjustDKP(MonDKP.ConfigTab2.addDKP:GetNumber(),true)
-				end,
-				timeout = 0,
-				whileDead = true,
-				hideOnEscape = true,
-				preferredIndex = 3,
-			}
-			StaticPopup_Show ("ADJUST_DKPP")
-		else
-			MonDKP:Print("in else")
-			MonDKP:AdjustDKP(MonDKP.ConfigTab2.addDKP:GetNumber(),true);
-		end
-	end)
-	MonDKP.ConfigTab2.adjustButton:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-		GameTooltip:SetText(L["ADJUSTDKPP"], 0.25, 0.75, 0.90, 1, true);
 		GameTooltip:AddLine(L["ADJUSTDKPTTDESC"], 1.0, 1.0, 1.0, true);
 		GameTooltip:AddLine(L["ADJUSTDKPTTWARN"], 1.0, 0, 0, true);
 		GameTooltip:Show();
