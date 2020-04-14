@@ -67,6 +67,7 @@ if GetLocale() == "esES" or GetLocale() == "esMX" then
 
     El alcance se puede ajustar con "Mostrar solo incursión " a continuación o en la pestaña "Filtros".]=],
     ADJUSTDKP = "Ajustar DKP",
+    ADJUSTDKPP = "Ajustar DKP%",
     ADJUSTDKPTTDESC = "Aplique la entrada anterior a todos los jugadores seleccionados en la tabla DKP.",
     ADJUSTDKPTTWARN = "Esta entrada se transmitirá a todos los jugadores en línea de tu gremio.",
     ALL = "todas",

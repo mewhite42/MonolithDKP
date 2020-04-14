@@ -67,6 +67,7 @@ if GetLocale() == "zhCN" then
 
     范围可以通过下面的“仅显示Raid”或“过滤器”标签进行调整。]=],
     ADJUSTDKP = "调整DKP",
+    ADJUSTDKPP = "调整DKP%",
     ADJUSTDKPTTDESC = "将以上条目应用于DKP表中的所有选定播放器。",
     ADJUSTDKPTTWARN = "此项将广播给您公会中的所有在线玩家。",
     ALL = "所有",

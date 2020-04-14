@@ -5,7 +5,7 @@ local L = core.L;
 
 local curReason;
 
-function MonDKP:AdjustDKP(value)
+function MonDKP:AdjustDKP(value,pflag)
 	local adjustReason = curReason;
 	local curTime = time()
 	local c;
@@ -35,8 +35,14 @@ function MonDKP:AdjustDKP(value)
 					end
 					dkpHistoryString = dkpHistoryString..core.SelectedData[i]["player"]..","
 					current = MonDKP_DKPTable[search[1][1]].dkp
-					MonDKP_DKPTable[search[1][1]].dkp = MonDKP_round(tonumber(current + value), MonDKP_DB.modes.rounding)
-					if value > 0 then
+					if pflag then
+						MonDKP_DKPTable[search[1][1]].dkp = MonDKP_round(tonumber(current + value*.01*current), MonDKP_DB.modes.rounding)
+					else
+						MonDKP_DKPTable[search[1][1]].dkp = MonDKP_round(tonumber(current + value), MonDKP_DB.modes.rounding)
+					end
+					if value > 0 and pflag then
+						MonDKP_DKPTable[search[1][1]]["lifetime_gained"] = MonDKP_round(tonumber(MonDKP_DKPTable[search[1][1]]["lifetime_gained"] + value*.01*current), MonDKP_DB.modes.rounding)
+					elseif value > 0 then
 						MonDKP_DKPTable[search[1][1]]["lifetime_gained"] = MonDKP_round(tonumber(MonDKP_DKPTable[search[1][1]]["lifetime_gained"] + value), MonDKP_DB.modes.rounding)
 					end
 				end
@@ -50,9 +56,17 @@ function MonDKP:AdjustDKP(value)
 			end
 			DKPTable_Update()
 			if IsInRaid() then
-				MonDKP.Sync:SendData("MonDKPBCastMsg", L["RAIDDKPADJUSTBY"].." "..value.." "..L["FORREASON"]..": "..adjustReason)
+				if pflag then
+					MonDKP.Sync:SendData("MonDKPBCastMsg", L["RAIDDKPADJUSTBY"].." "..value.."% "..L["FORREASON"]..": "..adjustReason)
+				else
+					MonDKP.Sync:SendData("MonDKPBCastMsg", L["RAIDDKPADJUSTBY"].." "..value.." "..L["FORREASON"]..": "..adjustReason)
+				end
 			else
-				MonDKP.Sync:SendData("MonDKPBCastMsg", L["DKPADJUSTBY"].." "..value.." "..L["FORPLAYERS"]..": ")
+				if pflag then
+					MonDKP.Sync:SendData("MonDKPBCastMsg", L["DKPADJUSTBY"].." "..value.."% "..L["FORPLAYERS"]..": ")
+				else
+					MonDKP.Sync:SendData("MonDKPBCastMsg", L["DKPADJUSTBY"].." "..value.." "..L["FORPLAYERS"]..": ")
+				end
 				MonDKP.Sync:SendData("MonDKPBCastMsg", tempString)
 				MonDKP.Sync:SendData("MonDKPBCastMsg", L["REASON"]..": "..adjustReason)
 			end
@@ -465,7 +479,7 @@ function MonDKP:AdjustDKPTab_Create()
 				button1 = L["YES"],
 				button2 = L["NO"],
 				OnAccept = function()
-					MonDKP:AdjustDKP(MonDKP.ConfigTab2.addDKP:GetNumber())
+					MonDKP:AdjustDKP(MonDKP.ConfigTab2.addDKP:GetNumber(),false)
 				end,
 				timeout = 0,
 				whileDead = true,
@@ -474,12 +488,65 @@ function MonDKP:AdjustDKPTab_Create()
 			}
 			StaticPopup_Show ("ADJUST_DKP")
 		else
-			MonDKP:AdjustDKP(MonDKP.ConfigTab2.addDKP:GetNumber());
+			MonDKP:AdjustDKP(MonDKP.ConfigTab2.addDKP:GetNumber(),false);
 		end
 	end)
 	MonDKP.ConfigTab2.adjustButton:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
 		GameTooltip:SetText(L["ADJUSTDKP"], 0.25, 0.75, 0.90, 1, true);
+		GameTooltip:AddLine(L["ADJUSTDKPTTDESC"], 1.0, 1.0, 1.0, true);
+		GameTooltip:AddLine(L["ADJUSTDKPTTWARN"], 1.0, 0, 0, true);
+		GameTooltip:Show();
+	end)
+	MonDKP.ConfigTab2.adjustButton:SetScript("OnLeave", function(self)
+		GameTooltip:Hide()
+	end)
+
+
+	-- Adjust DKP% Button 
+	MonDKP.ConfigTab2.adjustButton = self:CreateButton("TOPLEFT", MonDKP.ConfigTab2.adjustButton, "BOTTOMLEFT", -1, -15, L["ADJUSTDKPP"]);
+	MonDKP.ConfigTab2.adjustButton:SetSize(90,25)
+	MonDKP.ConfigTab2.adjustButton:SetScript("OnClick", function()
+		MonDKP:Print("in function")
+		if #core.SelectedData > 0 and curReason and MonDKP.ConfigTab2.otherReason:GetText() then
+			MonDKP:Print("in if")
+			local selected = L["AREYOUSURE"].." "..MonDKP_round(MonDKP.ConfigTab2.addDKP:GetNumber(), MonDKP_DB.modes.rounding).."% "..L["DKPTOFOLLOWING"]..": \n\n";
+			for i=1, #core.SelectedData do
+				local classSearch = MonDKP:Table_Search(MonDKP_DKPTable, core.SelectedData[i].player)
+
+				if classSearch then
+					c = MonDKP:GetCColors(MonDKP_DKPTable[classSearch[1][1]].class)
+				else
+					c = { hex="ffffff" }
+				end
+				if i == 1 then
+				selected = selected.."|cff"..c.hex..core.SelectedData[i].player.."|r"
+				else
+					selected = selected..", |cff"..c.hex..core.SelectedData[i].player.."|r"
+				end
+			end
+			MonDKP:Print("beforepopup")
+			StaticPopupDialogs["ADJUST_DKPP"] = {
+				text = selected,
+				button1 = L["YES"],
+				button2 = L["NO"],
+				OnAccept = function()
+					MonDKP:AdjustDKP(MonDKP.ConfigTab2.addDKP:GetNumber(),true)
+				end,
+				timeout = 0,
+				whileDead = true,
+				hideOnEscape = true,
+				preferredIndex = 3,
+			}
+			StaticPopup_Show ("ADJUST_DKPP")
+		else
+			MonDKP:Print("in else")
+			MonDKP:AdjustDKP(MonDKP.ConfigTab2.addDKP:GetNumber(),true);
+		end
+	end)
+	MonDKP.ConfigTab2.adjustButton:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+		GameTooltip:SetText(L["ADJUSTDKPP"], 0.25, 0.75, 0.90, 1, true);
 		GameTooltip:AddLine(L["ADJUSTDKPTTDESC"], 1.0, 1.0, 1.0, true);
 		GameTooltip:AddLine(L["ADJUSTDKPTTWARN"], 1.0, 0, 0, true);
 		GameTooltip:Show();
