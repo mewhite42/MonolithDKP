@@ -67,6 +67,7 @@ if GetLocale() == "deDE" then
 
     Der Bereich kann mit "Nur Schlachtzug anzeigen" unten oder auf der Registerkarte "Filter" angepasst werden.]=],
     ADJUSTDKP = "DKP ändern",
+    ADJUSTDKPP = "DKP% ändern",
     ADJUSTDKPTTDESC = "Übernehmen Sie die obige Änderung für alle ausgewählten Spieler in der DKP-Tabelle.",
     ADJUSTDKPTTWARN = "Diese Änderung wird an alle Online-Spieler in deiner Gilde gesendet.",
     ALL = "alle",

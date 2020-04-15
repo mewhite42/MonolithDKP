@@ -67,6 +67,7 @@ if GetLocale() == "frFR" then
 
     La portée peut être ajustée avec "Show Raid Only" en dessous ou sur l'onglet "Filtres".]=],
     ADJUSTDKP = "Ajustement des DKP",
+    ADJUSTDKPP = "Ajustement des DKP%",
     ADJUSTDKPTTDESC = "Appliquez l'entrée ci-dessus à tous les joueurs sélectionnés dans le tableau DKP.",
     ADJUSTDKPTTWARN = "Cette ajustement sera diffusée à tous les joueurs en ligne de votre guilde.",
     ALL = "tout",

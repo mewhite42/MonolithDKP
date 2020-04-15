@@ -67,6 +67,7 @@ if GetLocale() == "zhTW" then
 
     範圍可以通過"僅顯示 Raid"在下方或"篩檢程式"選項卡上進行調整。]=],
     ADJUSTDKP = "調整 DKP",
+    ADJUSTDKPP = "調整 DKP%",
     ADJUSTDKPTTDESC = "將以上條目應用於DKP錶中選定的所有玩家。",
     ADJUSTDKPTTWARN = "此條目將廣播給你的公會中的所有線上玩家。",
     ALL = "所有",

@@ -67,6 +67,7 @@ if GetLocale() == "koKR" then
 
     범위는 아래 또는 "필터"탭에서 "레이드 만 표시"를 사용하여 조정할 수 있습니다.]=],
     ADJUSTDKP = "DKP 조정",
+    ADJUSTDKPP = "DKP% 조정",
     ADJUSTDKPTTDESC = "DKP 테이블에서 선택한 모든 플레이어에게 위의 항목을 적용하십시오.",
     ADJUSTDKPTTWARN = "이 항목은 길드의 모든 온라인 플레이어에게 방송됩니다.",
     ALL = "모두",

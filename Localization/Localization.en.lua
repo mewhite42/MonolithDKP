@@ -64,6 +64,7 @@ core.L = {
   ADDTOSTANDBY = "Add Selected Players to Standby List",
   ADJUSTDESC = "Select individual players from the left (Shift+Click for multiple players) or click \"Select All Visible\" below and enter amount to adjust.\n\nScope can be adjusted with \"Show Raid Only\" below or on the \"Filters\" tab.",
   ADJUSTDKP = "Adjust DKP",
+  ADJUSTDKPP = "Adjust DKP%",
   ADJUSTDKPTTDESC = "Apply above entry to all selected players in the DKP table.",
   ADJUSTDKPTTWARN = "This entry will be broadcasted to all online players in your guild.",
   ALL = "all",

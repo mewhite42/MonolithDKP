@@ -214,7 +214,7 @@ function MonDKP_CHAT_MSG_WHISPER(text, ...)
               BidScrollFrame_Update()
             else
               if core.BiddingWindow.PercentCheck:GetChecked() then
-                response = L["BIDDENIEDMINBID"].." "..tonumber(core.BiddingWindow.minBid:GetNumber())*.01*dkp.."!"
+                response = L["BIDDENIEDMINBID"].." "..MonDKP_round(tonumber(core.BiddingWindow.minBid:GetNumber())*.01*dkp, MonDKP_DB.modes.rounding).."!"
               else
                 response = L["BIDDENIEDMINBID"].." "..core.BiddingWindow.minBid:GetNumber().."!"
               end
