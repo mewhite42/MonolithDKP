@@ -1760,7 +1760,18 @@ function MonDKP:CreateBidWindow()
       f.CustomMinBid:SetPoint("LEFT", f.cost, "RIGHT", 10, 0);
     end
 
-    f.StartBidding = MonDKP:CreateButton("LEFT", f.cost, "RIGHT", 80, 0, L["AWARDITEM"]);
+    f.PublishBids = MonDKP:CreateButton("LEFT", f.cost, "RIGHT", 20, 0, L["PUBLISHBIDS"]);
+    f.PublishBids:SetSize(90,25)
+    f.PublishBids:SetScript("OnClick", function ()
+      SendChatMessage("Bids", "RAID")
+      SendChatMessage("-----------------------------------------------", "RAID")
+      for i= 1, table.getn(Bids_Submitted)
+      do
+        SendChatMessage( Bids_Submitted[i].player .. ": ".. Bids_Submitted[i].bid .. " ".. L["DKP"], "RAID");
+      end
+    end);
+
+    f.StartBidding = MonDKP:CreateButton("LEFT", f.cost, "RIGHT", 130, 0, L["AWARDITEM"]);
     f.StartBidding:SetSize(90,25)
     f.StartBidding:SetScript("OnClick", function ()  -- confirmation dialog to remove user(s)
       if SelectedBidder["player"] then

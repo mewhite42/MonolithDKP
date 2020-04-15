@@ -14,11 +14,11 @@ function ImportDKP(MonDKP_Loot, CurFormat)
             local name = string.match(i, "playername=.-\-")
             name = name:sub(13,-2)
             local net = string.match(i, "net=.-\"%d.-\"")
-            net = net:sub(6,-2)
+            net = tonumber(net:sub(6,-2))
             local total = string.match(i, "total=.-\"%d-\"")
-            total = total:sub(8,-2)
+            total = tonumber(total:sub(8,-2))
             local spent = string.match(i, "spent=.-\"%d-\"")
-            spent = spent:sub(8,-2)
+            spent = tonumber(spent:sub(8,-2))*-1
 
             MonDKP_Profile_Create(name, net , total, spent)
         end

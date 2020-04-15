@@ -466,6 +466,7 @@ core.L = {
   POPOUTTIMERDESC = "Pops out the raid timer to a separate compact window.",
   POSITIONRESET = "Window Position Reset",
   PROTECTION = "Protection",
+  PUBLISHBIDS = "Publish Bids",
   PURGECONFIRM = "Are you sure you wish to purge the DKP list?",
   PURGELIST = "Purge DKP List",
   PURGELISTTTDESC = "Purges DKP list of all players that have zero DKP and no DKP history.",
